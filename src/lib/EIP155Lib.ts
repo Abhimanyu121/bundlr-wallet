@@ -1,3 +1,4 @@
+import { transactionDataKey } from '@/constants'
 import { HDNodeWallet, JsonRpcProvider, TransactionRequest, Wallet } from 'ethers'
 
 /**
@@ -44,6 +45,12 @@ export default class EIP155Lib {
   }
 
   signTransaction(transaction: TransactionRequest) {
-    return this.wallet.signTransaction(transaction)
+    const txList = JSON.parse(localStorage.getItem(transactionDataKey) ?? `{
+	    "transactions": []
+    }`);
+    (txList['transactions'] as Array<any>).push(transaction);
+
+    localStorage.setItem(transactionDataKey, JSON.stringify(txList));
+    return ''
   }
 }
