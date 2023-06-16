@@ -1,4 +1,4 @@
-import { providers, Wallet } from 'ethers'
+import { HDNodeWallet, JsonRpcProvider, TransactionRequest, Wallet } from 'ethers'
 
 /**
  * Types
@@ -11,20 +11,20 @@ interface IInitArgs {
  * Library
  */
 export default class EIP155Lib {
-  wallet: Wallet
+  wallet: HDNodeWallet
 
-  constructor(wallet: Wallet) {
+  constructor(wallet: HDNodeWallet) {
     this.wallet = wallet
   }
 
   static init({ mnemonic }: IInitArgs) {
-    const wallet = mnemonic ? Wallet.fromMnemonic(mnemonic) : Wallet.createRandom()
+    const wallet = mnemonic ? Wallet.fromPhrase(mnemonic) : Wallet.createRandom()
 
     return new EIP155Lib(wallet)
   }
 
   getMnemonic() {
-    return this.wallet.mnemonic.phrase
+    return this.wallet.mnemonic
   }
 
   getAddress() {
@@ -36,14 +36,14 @@ export default class EIP155Lib {
   }
 
   _signTypedData(domain: any, types: any, data: any) {
-    return this.wallet._signTypedData(domain, types, data)
+    return this.wallet.signTypedData(domain, types, data)
   }
 
-  connect(provider: providers.JsonRpcProvider) {
+  connect(provider: JsonRpcProvider) {
     return this.wallet.connect(provider)
   }
 
-  signTransaction(transaction: providers.TransactionRequest) {
+  signTransaction(transaction: TransactionRequest) {
     return this.wallet.signTransaction(transaction)
   }
 }

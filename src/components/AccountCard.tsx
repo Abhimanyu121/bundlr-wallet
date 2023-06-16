@@ -58,19 +58,7 @@ export default function AccountCard({ name, logo, rgb, address, chainId }: Props
           />
         </Button>
       </Tooltip>
-    <Button
-        size="sm"
-        css={{
-          minWidth: "auto",
-          backgroundColor: "rgba(255, 255, 255, 0.15)",
-          marginLeft: "$5",
-        }}
-        onPress={() => {
-          onChainChanged(chainId, address);
-        }}
-      >
-        {activeChainId === chainId ? `✅` : `🔄`}
-      </Button>
+
     </ChainCard>
   )
 }
