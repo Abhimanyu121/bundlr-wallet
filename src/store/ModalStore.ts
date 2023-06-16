@@ -20,22 +20,22 @@ interface ModalData {
 interface State {
   open: boolean
   view?:
-    | 'SessionProposalModal'
-    | 'SessionSignModal'
-    | 'SessionSignTypedDataModal'
-    | 'SessionSendTransactionModal'
-    | 'SessionUnsuportedMethodModal'
-    | 'SessionSignCosmosModal'
-    | 'SessionSignSolanaModal'
-    | 'SessionSignPolkadotModal'
-    | 'SessionSignNearModal'
-    | 'SessionSignMultiversxModal'
-    | 'SessionSignTronModal'
-    | 'SessionSignTezosModal'
-    | 'LegacySessionProposalModal'
-    | 'LegacySessionSignModal'
-    | 'LegacySessionSignTypedDataModal'
-    | 'LegacySessionSendTransactionModal'
+  | 'SessionProposalModal'
+  | 'SessionSignModal'
+  | 'SessionSignTypedDataModal'
+  | 'SessionSendTransactionModal'
+  | 'SessionUnsuportedMethodModal'
+  | 'SessionSignCosmosModal'
+  | 'SessionSignSolanaModal'
+  | 'SessionSignPolkadotModal'
+  | 'SessionSignNearModal'
+  | 'SessionSignMultiversxModal'
+  | 'SessionSignTronModal'
+  | 'SessionSignTezosModal'
+  | 'LegacySessionProposalModal'
+  | 'LegacySessionSignModal'
+  | 'LegacySessionSignTypedDataModal'
+  | 'LegacySessionSendTransactionModal'
   data?: ModalData
 }
 

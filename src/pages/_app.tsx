@@ -7,6 +7,7 @@ import { Button, createTheme, NextUIProvider } from '@nextui-org/react'
 import { AppProps } from 'next/app'
 import '../../public/main.css'
 import { connectWallet } from '@/components/ExternalWallet/ExternalWallet'
+import { TransactionsList } from '@/components/TransactionsList'
 
 export default function App({ Component, pageProps }: AppProps) {
   // Step 1 - Initialize wallets and wallet connect client
@@ -22,7 +23,10 @@ export default function App({ Component, pageProps }: AppProps) {
     <NextUIProvider theme={createTheme({ type: 'dark' })}>
       <Layout initialized={initialized}>
         <Component {...pageProps} />
-        <Button onClick={connectWallet}> Connect </Button>
+        <div><Button onClick={connectWallet}> Connect </Button>
+          <TransactionsList></TransactionsList>
+        </div>
+
 
       </Layout>
 
