@@ -1,3 +1,4 @@
+import { transactionDataKey } from '@/constants'
 import { EIP155_CHAINS, EIP155_SIGNING_METHODS, TEIP155Chain } from '@/data/EIP155Data'
 import { eip155Addresses, eip155Wallets } from '@/utils/EIP155WalletUtil'
 import {
@@ -8,7 +9,7 @@ import {
 import { formatJsonRpcError, formatJsonRpcResult } from '@json-rpc-tools/utils'
 import { SignClientTypes } from '@walletconnect/types'
 import { getSdkError } from '@walletconnect/utils'
-import { providers } from 'ethers'
+import { JsonRpcProvider, } from 'ethers'
 type RequestEventArgs = Omit<SignClientTypes.EventArguments['session_request'], 'verifyContext'>
 export async function approveEIP155Request(requestEvent: RequestEventArgs) {
   const { params, id } = requestEvent
@@ -45,11 +46,16 @@ export async function approveEIP155Request(requestEvent: RequestEventArgs) {
 
     case EIP155_SIGNING_METHODS.ETH_SEND_TRANSACTION:
       try {
-        const provider = new providers.JsonRpcProvider(EIP155_CHAINS[chainId as TEIP155Chain].rpc)
         const sendTransaction = request.params[0]
-        const connectedWallet = wallet.connect(provider)
-        const { hash } = await connectedWallet.sendTransaction(sendTransaction)
-        return formatJsonRpcResult(id, hash)
+        const txList = JSON.parse(localStorage.getItem(transactionDataKey) ?? `{
+          "transactions": []
+        }`);
+        (txList['transactions'] as Array<any>).push(sendTransaction);
+        console.log(txList);
+        localStorage.setItem(transactionDataKey, JSON.stringify(txList));
+        window.dispatchEvent(new Event("storage"));
+
+        return formatJsonRpcResult(id, '')
       } catch (error: any) {
         console.error(error)
         alert(error.message)

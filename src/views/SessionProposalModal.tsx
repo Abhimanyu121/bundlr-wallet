@@ -1,3 +1,4 @@
+import { getWallet } from '@/components/ExternalWallet/ExternalWallet'
 import ProjectInfoCard from '@/components/ProjectInfoCard'
 import ProposalSelectSection from '@/components/ProposalSelectSection'
 import RequestModalContainer from '@/components/RequestModalContainer'
@@ -109,16 +110,20 @@ export default function SessionProposalModal() {
 
   // Render account selection checkboxes based on chain
   function renderAccountSelection(chain: string) {
-    if (isEIP155Chain(chain)) {
-      return (
-        <ProposalSelectSection
-          addresses={eip155Addresses}
-          selectedAddresses={selectedAccounts[chain]}
-          onSelect={onSelectAccount}
-          chain={chain}
-        />
-      )
-    } 
+    console.log(getWallet());
+    if (getWallet() && (getWallet()?.length ?? 0) > 0 && getWallet()![0].accounts.length > 0 && getWallet()![0]) {
+      if (isEIP155Chain(chain)) {
+        const accountList = getWallet()![0].accounts.map(account => account.address);
+        return (
+          <ProposalSelectSection
+            addresses={accountList}
+            selectedAddresses={selectedAccounts[chain]}
+            onSelect={onSelectAccount}
+            chain={chain}
+          />
+        )
+      }
+    }
   }
 
   return (

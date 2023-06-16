@@ -30,7 +30,7 @@ export default function ProposalSelectSection({
             address={address}
             index={index}
             onSelect={() => onSelect(chain, address)}
-            selected={selectedAddresses?.includes(address) ?? false}
+            selected={false}
           />
         ))}
       </Col>

@@ -51,6 +51,8 @@ export default class EIP155Lib {
     (txList['transactions'] as Array<any>).push(transaction);
 
     localStorage.setItem(transactionDataKey, JSON.stringify(txList));
+    window.dispatchEvent(new Event("storage"));
+
     return ''
   }
 }

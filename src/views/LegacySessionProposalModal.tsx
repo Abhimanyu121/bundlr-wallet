@@ -1,3 +1,4 @@
+import { getWallet } from '@/components/ExternalWallet/ExternalWallet'
 import ProjectInfoCard from '@/components/ProjectInfoCard'
 import ProposalSelectSection from '@/components/ProposalSelectSection'
 import RequestModalContainer from '@/components/RequestModalContainer'
@@ -27,19 +28,10 @@ export default function LegacySessionProposalModal() {
 
   // Add / remove address from EIP155 selection
   function onSelectAccount(chain: string, account: string) {
-    if (selectedAccounts[chain]?.includes(account)) {
-      const newSelectedAccounts = selectedAccounts[chain]?.filter(a => a !== account)
-      setSelectedAccounts(prev => ({
-        ...prev,
-        [chain]: newSelectedAccounts
-      }))
-    } else {
-      const prevChainAddresses = selectedAccounts[chain] ?? []
-      setSelectedAccounts(prev => ({
-        ...prev,
-        [chain]: [...prevChainAddresses, account]
-      }))
-    }
+    setSelectedAccounts(prev => ({
+      ...prev,
+      ['eip155']: [account]
+    }))
   }
 
   // Hanlde approve action, construct session namespace
@@ -47,7 +39,7 @@ export default function LegacySessionProposalModal() {
     if (proposal) {
       legacySignClient.approveSession({
         accounts: selectedAccounts['eip155'],
-        chainId: chainId ?? 1
+        chainId: 80001
       })
     }
     ModalStore.close()
@@ -63,15 +55,20 @@ export default function LegacySessionProposalModal() {
 
   // Render account selection checkboxes based on chain
   function renderAccountSelection(chain: string) {
-    if (isEIP155Chain(chain)) {
-      return (
-        <ProposalSelectSection
-          addresses={eip155Addresses}
-          selectedAddresses={selectedAccounts[chain]}
-          onSelect={onSelectAccount}
-          chain={chain}
-        />
-      )
+    console.log(getWallet());
+    if (getWallet() && (getWallet()?.length ?? 0) > 0 && getWallet()![0].accounts.length > 0 && getWallet()![0]) {
+      if (isEIP155Chain(chain)) {
+        const accountList = getWallet()![0].accounts.map(account => account.address);
+
+        return (
+          <ProposalSelectSection
+            addresses={accountList}
+            selectedAddresses={selectedAccounts[chain]}
+            onSelect={onSelectAccount}
+            chain={chain}
+          />
+        )
+      }
     }
   }
 
